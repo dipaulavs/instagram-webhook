@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  app:
+    image: loop9/instagram-webhook:latest
+    environment:
+      - PORT=8080
+      - TZ=America/Sao_Paulo
+    env_file:
+      - .env
+    networks:
+      - loop9Net
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+      update_config:
+        parallelism: 1
+        delay: 10s
+      labels:
+        # Traefik
+        - "traefik.enable=true"
+
+        # Router HTTP (redirect to HTTPS)
+        - "traefik.http.routers.instagram-webhook-http.rule=Host(`instagram-webhook.loop9.com.br`)"
+        - "traefik.http.routers.instagram-webhook-http.entrypoints=web"
+        - "traefik.http.routers.instagram-webhook-http.middlewares=redirect-to-https"
+
+        # Router HTTPS
+        - "traefik.http.routers.instagram-webhook.rule=Host(`instagram-webhook.loop9.com.br`)"
+        - "traefik.http.routers.instagram-webhook.entrypoints=websecure"
+        - "traefik.http.routers.instagram-webhook.tls.certresolver=letsencrypt"
+
+        # Service
+        - "traefik.http.services.instagram-webhook.loadbalancer.server.port=8080"
+
+        # Middleware redirect
+        - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+        - "traefik.http.middlewares.redirect-to-https.redirectscheme.permanent=true"
+
+networks:
+  loop9Net:
+    external: true
