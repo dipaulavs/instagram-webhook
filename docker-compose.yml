@@ -31,7 +31,7 @@ services:
         # Router HTTPS
         - "traefik.http.routers.instagram-webhook.rule=Host(`instawebhook.loop9.com.br`)"
         - "traefik.http.routers.instagram-webhook.entrypoints=websecure"
-        - "traefik.http.routers.instagram-webhook.tls.certresolver=letsencrypt"
+        - "traefik.http.routers.instagram-webhook.tls.certresolver=letsencryptresolver"
 
         # Service
         - "traefik.http.services.instagram-webhook.loadbalancer.server.port=8080"
