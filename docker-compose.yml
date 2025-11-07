@@ -24,12 +24,12 @@ services:
         - "traefik.enable=true"
 
         # Router HTTP (redirect to HTTPS)
-        - "traefik.http.routers.instagram-webhook-http.rule=Host(`instagram-webhook.loop9.com.br`)"
+        - "traefik.http.routers.instagram-webhook-http.rule=Host(`instawebhook.loop9.com.br`)"
         - "traefik.http.routers.instagram-webhook-http.entrypoints=web"
         - "traefik.http.routers.instagram-webhook-http.middlewares=redirect-to-https"
 
         # Router HTTPS
-        - "traefik.http.routers.instagram-webhook.rule=Host(`instagram-webhook.loop9.com.br`)"
+        - "traefik.http.routers.instagram-webhook.rule=Host(`instawebhook.loop9.com.br`)"
         - "traefik.http.routers.instagram-webhook.entrypoints=websecure"
         - "traefik.http.routers.instagram-webhook.tls.certresolver=letsencrypt"
 
